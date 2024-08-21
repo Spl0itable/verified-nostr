@@ -3,7 +3,7 @@
 This service allows you to automatically verify that your public key is correctly associated with your NIP-05 address. The service is free to use and the identifier addresses are hosted on the `verified-nostr.com` domain.
 
 If you appreciate this free service:
-- Zap us some sats `lucas@walletofsatoshi.com`
+- Zap us some sats `69420@walletofsatoshi.com`
 - Donate Bitcoin on `CoinFund.app` here: https://coinfund.app/wallet/#/campaign/502a78c3d425873bbcec26d567f2dab1
 
 ## Usage
