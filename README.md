@@ -1,6 +1,6 @@
-# Nostr NIP-05 Public Key Verifier
+# Nostr Address (NIP-05) Identifier
 
-This service allows you to automatically verify that your public key is correctly associated with your NIP-05 address. The service is free to use and the identifier addresses are hosted on the `verified-nostr.com` domain.
+This service allows you to automatically identify your public key with an associated Nostr address (NIP-05). The service is free to use and the identifier addresses are hosted on the `NostrAddress.com` domain.
 
 If you appreciate this free service:
 - Zap us some sats `69420@walletofsatoshi.com`
@@ -8,23 +8,21 @@ If you appreciate this free service:
 
 ## Usage
 
-To verify your public key for a NIP-05 address, follow these steps:
+To assign a Nostr Address with your public key, follow these steps:
 
-1. Go to `https://verified-nostr.com`
+1. Go to `https://NostrAddress.com`
 2. Enter your username and public key (hex format) into the form provided.
 3. If details are correct, it should return a success message stating what to do next.
 
-If your public key is correctly associated with your NIP-05 address, you will see the `@verified-nostr.com` checkmark verification appear on your Nostr account. If the verification fails, nothing will show and you will need to resubmit.
+If your public key is correctly associated with your Nostr address, you will see the `@vNostrAddress.com` checkmark appear on your Nostr account. If the identification fails, nothing will show and you will need to resubmit.
 
 ## How it works
 
-The Nostr Public Key Verifier uses the NIP-05 protocol to verify the association between your public key and your NIP-05 address. When you enter your information into the NIP-05 field of a Nostr client (such as Damus or Snort), the service generates a unique verification request that includes your NIP-05 address and public key.
-
-The service then sends this verification request to the Nostr network, which uses relays to confirm that your public key is correctly associated with your @verfieid-nostr.com NIP-05 address. If the verification is successful, your account will show as verified.
+The Nostr NIP-05 protocol is used to create an identifier between your public key and your Nostr address. When you enter your information into the Nostr address (NIP-05) field of a Nostr client (such as Damus or Primal), they send a request to confirm the Nostr address and public key are associated.
 
 ## Security and privacy
 
-The Nostr Public Key Verifier is designed with security and privacy in mind. The service uses HTTPS to encrypt all communication between your browser and our server, ensuring that your data is protected in transit. The service does not store your private key on the server.
+This free service is designed with security and privacy in mind. The service uses HTTPS to encrypt all communication between your browser and our server, ensuring that your data is protected in transit. The service does not require or store your private key on the server.
 
 ## Disclaimer
 
