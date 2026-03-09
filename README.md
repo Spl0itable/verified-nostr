@@ -3,8 +3,7 @@
 This service allows you to automatically identify your public key with an associated Nostr address (NIP-05). The service is free to use and the identifier addresses are hosted on the `NostrAddress.com` domain.
 
 If you appreciate this free service:
-- Zap us some sats `69420@walletofsatoshi.com`
-- Donate Bitcoin on `CoinFund.app` here: https://coinfund.app/wallet/#/campaign/502a78c3d425873bbcec26d567f2dab1
+- Zap us some sats `69420@wallet.yakihonne.com`
 
 ## Usage
 
