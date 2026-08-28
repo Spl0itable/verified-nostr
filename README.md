@@ -36,12 +36,35 @@ that AI agents and assistants can read it directly:
 | [Troubleshooting](docs/troubleshooting.md) | `/docs/troubleshooting.md` |
 | [The Nostr protocol](docs/nostr-protocol.md) | `/docs/nostr-protocol.md` |
 
+The homepage, both post-checkout pages and `404.html` all link these documents
+from their footers, so agents and crawlers can reach them without knowing the
+convention.
+
 ### AI agent entry points
 
 - [`llms.txt`](llms.txt) — concise, linked site summary following the [llmstxt.org](https://llmstxt.org) convention
 - [`llms-full.txt`](llms-full.txt) — every document above concatenated for single-fetch ingestion
 - [`robots.txt`](robots.txt) — crawler policy; AI crawlers are explicitly allowed
 - [`sitemap.xml`](sitemap.xml) — canonical URL list
+
+### 404 handling
+
+[`404.html`](404.html) is served by GitHub Pages for any unmatched path, with a
+real HTTP 404 status. It is `noindex, follow` and links onward to registration,
+the docs and the NIP-05 endpoint.
+
+> **If 404s still redirect to the homepage after deploying**, the redirect is
+> coming from the CDN or DNS layer in front of GitHub Pages rather than from
+> this repository — check for a Cloudflare redirect rule, bulk redirect, or
+> custom error page. Verify the deployed behaviour with:
+>
+> ```sh
+> curl -sSI https://nostraddress.com/this-page-does-not-exist | head -1
+> # expect: HTTP/2 404
+> ```
+>
+> A soft 404 (a redirect answering 200) makes search engines index every bad
+> URL as a duplicate of the homepage.
 
 > **Maintainer note:** files in `docs/`, along with `llms.txt`, `llms-full.txt`,
 > `robots.txt` and `sitemap.xml`, must **not** be given YAML front matter.
