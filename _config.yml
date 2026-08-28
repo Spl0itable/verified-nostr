@@ -1,1 +1,16 @@
+# GitHub Pages / Jekyll configuration for nostraddress.com
+
+title: "NostrAddress.com"
+description: "Free and premium Nostr Address (NIP-05) identifiers and a spam-free premium Nostr relay."
+url: "https://nostraddress.com"
+lang: en-US
+
+# Dot-directories are skipped by Jekyll unless listed here.
+# .well-known/nostr.json is the NIP-05 resolution endpoint and must be published.
 include: [".well-known"]
+
+# NOTE: files under docs/, plus llms.txt, llms-full.txt, robots.txt and
+# sitemap.xml, deliberately carry NO YAML front matter. Jekyll therefore treats
+# them as static files and copies them byte-for-byte, so AI agents and crawlers
+# fetch the raw Markdown/text rather than a rendered HTML page. Do not add front
+# matter to those files.

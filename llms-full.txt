@@ -1,0 +1,921 @@
+# NostrAddress.com — Full Documentation
+
+> Free and premium Nostr Address (NIP-05) identifiers, plus a spam-free premium
+> Nostr relay. This file concatenates the complete documentation set for
+> single-fetch ingestion by AI agents. Source documents live at
+> https://nostraddress.com/docs/ and a linked index is at
+> https://nostraddress.com/llms.txt
+
+Last updated: 2026-08-28
+
+---
+
+<!-- source: https://nostraddress.com/docs/README.md -->
+
+# NostrAddress.com Documentation
+
+> Free and premium Nostr Address (NIP-05) identifiers and a spam-free premium
+> Nostr relay, operated by 21 Million LLC.
+
+NostrAddress.com issues **NIP-05 identifiers** — human-readable `username@domain`
+addresses that map to a Nostr public key. Once registered, Nostr clients such as
+Damus, Amethyst, Primal, Nostur, and Snort display a "verified" checkmark next to
+your profile name.
+
+Website: <https://nostraddress.com>
+
+## Documentation index
+
+| Document | What it covers |
+| --- | --- |
+| [what-is-nip-05.md](what-is-nip-05.md) | What a NIP-05 identifier is, what it does and does not prove |
+| [getting-started.md](getting-started.md) | Step-by-step registration for the free and premium tiers |
+| [plans-and-pricing.md](plans-and-pricing.md) | Free, Purple, and Onyx plans; domains and features per tier |
+| [relay.md](relay.md) | The premium relay `wss://relay.nostraddress.com` |
+| [api.md](api.md) | The `/.well-known/nostr.json` endpoint, for programmatic lookups |
+| [faq.md](faq.md) | Frequently asked questions |
+| [troubleshooting.md](troubleshooting.md) | Why a checkmark is not appearing, and how to fix it |
+| [nostr-protocol.md](nostr-protocol.md) | Background on the Nostr protocol itself |
+
+## Quick facts
+
+- **Service:** Nostr Address (NIP-05) identifier registration + premium Nostr relay
+- **Free tier:** yes — `@nostraddress.com` and `@nostrverified.com`, processed in batches within 1 hour
+- **Premium tiers:** Purple and Onyx — registration is instant
+- **Premium relay:** `wss://relay.nostraddress.com` (subscribers only)
+- **Key format required:** 64-character hexadecimal public key, **not** `npub` and **never** `nsec`
+- **Username format:** alphanumeric only (`A–Z`, `a–z`, `0–9`)
+- **Support:** <support@NostrAddress.com>
+- **Operator:** 21 Million LLC — <https://nostrservices.com>
+- **Nostr profile:** `npub10svpr6g7j2c5slxy2zm8k8mjm9qdm9zp5mkc0lhqw95a6jtesgaq4uycy8`
+
+## For AI agents
+
+Machine-readable summaries of this site are published at:
+
+- <https://nostraddress.com/llms.txt> — concise guide with links
+- <https://nostraddress.com/llms-full.txt> — the full documentation in one file
+
+Registration itself requires a human-completed hCaptcha on
+<https://nostraddress.com/#free>, so it cannot be automated. Lookups of existing
+registrations *are* fully automatable — see [api.md](api.md).
+
+## Disclaimer
+
+This service is not affiliated with the Nostr project. It is offered "as is"
+without warranty of any kind, expressed or implied. The operators never see or
+store your private key (`nsec`) and are not responsible for any damages or losses
+resulting from misuse of Nostr.
+
+---
+
+<!-- source: https://nostraddress.com/docs/what-is-nip-05.md -->
+
+# What is a Nostr Address (NIP-05)?
+
+A **Nostr Address** is an identifier defined by [NIP-05](https://github.com/nostr-protocol/nips/blob/master/05.md),
+one of the Nostr Implementation Possibilities. It maps a short, human-readable
+name to a Nostr public key.
+
+The format looks exactly like an email address:
+
+```
+username@nostraddress.com
+```
+
+It is *not* an email address and cannot receive mail. It is an identifier.
+
+## Why it exists
+
+A Nostr account is really a public key — a 64-character hexadecimal string, or
+its `npub1…` bech32 encoding. Both are unreadable and impossible to remember:
+
+```
+d49a9023a21dba1b3c8306ca369bf3243d8b44b8f0b6d1196607f7b0990fa8df
+npub10svpr6g7j2c5slxy2zm8k8mjm9qdm9zp5mkc0lhqw95a6jtesgaq4uycy8
+```
+
+NIP-05 lets you hand out `lucas@nostraddress.com` instead. Nostr clients resolve
+that address back to the underlying public key, so people can find and follow you
+without copying a key around.
+
+## How resolution works
+
+When you enter a Nostr Address into the NIP-05 field of a client, the client
+performs a single HTTPS request:
+
+```
+GET https://nostraddress.com/.well-known/nostr.json?name=username
+```
+
+The server responds with JSON mapping names to hex public keys:
+
+```json
+{
+  "names": {
+    "username": "d49a9023a21dba1b3c8306ca369bf3243d8b44b8f0b6d1196607f7b0990fa8df"
+  }
+}
+```
+
+If the returned public key matches the public key of the profile being displayed,
+the client considers the address valid and shows a checkmark. If it does not
+match — or the name is absent — nothing is shown.
+
+See [api.md](api.md) for the full endpoint specification.
+
+## What a checkmark actually means
+
+This is the part most people get wrong.
+
+NIP-05 is designed to **identify** users, not to **verify** them. It is closer to
+a username registry than to a legacy social-media blue check. A NIP-05 address
+proves exactly one thing: *whoever controls the domain agreed to associate this
+name with this public key.*
+
+There is one meaningful exception. When an individual or entity is associated
+with a reputable domain — a company, a project, a publication — a NIP-05 address
+on that domain does act as an endorsement of their connection to that
+organization, and that carries a real degree of trust. `alice@example-corp.com`
+tells you Example Corp vouches for Alice.
+
+A NIP-05 address does **not** prove:
+
+- that you are a particular real-world person
+- that any identity document was checked
+- that the account is endorsed by the Nostr project
+- that the account is trustworthy
+
+That said, registering with NostrAddress.com does cause the "verified" checkmark
+to render on your account across Nostr clients, which is what most people are
+looking for.
+
+## Where it shows up
+
+Clients known to display NIP-05 identifiers include Damus, Amethyst, Primal,
+Nostur, and Snort. Support and presentation vary by client — some show a
+checkmark, some show the address itself, some show both.
+
+## Next steps
+
+- [getting-started.md](getting-started.md) — register an address
+- [plans-and-pricing.md](plans-and-pricing.md) — free vs. Purple vs. Onyx
+- [troubleshooting.md](troubleshooting.md) — checkmark not appearing
+
+---
+
+<!-- source: https://nostraddress.com/docs/getting-started.md -->
+
+# Getting Started
+
+How to register a Nostr Address (NIP-05) identifier with NostrAddress.com.
+
+## Before you start: get your hex public key
+
+Registration requires your public key in **hexadecimal** format: exactly 64
+characters, using `0–9` and `a–f`.
+
+You cannot use:
+
+- `npub1…` — the bech32 encoding of your public key. Convert it first.
+- `nsec1…` — this is your **private key**. Never paste it into any website,
+  including this one. Anyone with your `nsec` controls your account permanently.
+
+To convert an `npub` to hex, use the [Damus Key Converter](https://damus.io/key).
+Paste your `npub`, and copy the hex value it returns.
+
+A valid hex key looks like this:
+
+```
+d49a9023a21dba1b3c8306ca369bf3243d8b44b8f0b6d1196607f7b0990fa8df
+```
+
+## Choose a username
+
+Usernames are **alphanumeric only** — letters `A–Z`, `a–z` and digits `0–9`. No
+spaces, dots, hyphens, or underscores.
+
+Usernames are allocated on a **first come, first served** basis. You can check
+whether a name is still free before subscribing to a paid plan using the
+availability checker on the pricing section of the site.
+
+## Option 1 — Free registration
+
+1. Go to <https://nostraddress.com/#free>.
+2. Enter your **Nostr username**.
+3. Enter your **public hex key** (64 hex characters).
+4. Complete the hCaptcha challenge.
+5. Press **Submit Registration**.
+
+Free submissions are processed in **hourly batches**. Wait up to one hour, then:
+
+6. Open your Nostr client (Damus, Amethyst, Primal, Nostur, Snort, …).
+7. Edit your profile and find the **Nostr Address (NIP-05)** field.
+8. Enter either `username@nostraddress.com` or `username@nostrverified.com`.
+9. Save your profile.
+
+The checkmark should appear once the client re-resolves your address. Some
+clients cache aggressively — see [troubleshooting.md](troubleshooting.md).
+
+## Option 2 — Premium registration (Purple or Onyx)
+
+Premium registration is **instant** — there is no hourly batch to wait for.
+
+1. Go to <https://nostraddress.com/#plan>.
+2. Use the availability checker to confirm your desired username is free.
+3. Choose the **Purple** or **Onyx** plan and complete checkout.
+4. Enter your username at checkout.
+5. On the confirmation page, add `username@domain` to the **Nostr Address
+   (NIP-05)** field of your Nostr client, using any domain included in your plan.
+6. Add the premium relay `wss://relay.nostraddress.com` to your client. Your
+   public key is allow-listed on the relay automatically.
+
+See [plans-and-pricing.md](plans-and-pricing.md) for which domains each plan
+includes, and [relay.md](relay.md) for relay setup.
+
+## What you never have to provide
+
+- Your private key (`nsec`)
+- Your seed phrase or any recovery material
+- Government ID or any identity documents
+
+The NIP-05 protocol only ever needs your **public** key. If a service asks for
+your `nsec`, it is a scam.
+
+## Keeping your registration working
+
+Your registration binds one username to one public key. It breaks if either side
+changes:
+
+- **Change your public key** → re-register with the new key.
+- **Change your username in the client** → the NIP-05 field no longer matches
+  what is registered; re-register, or set the field back.
+
+Free users can simply resubmit the registration form. Paid subscribers should
+email <support@NostrAddress.com> and the change will be made for them.
+
+---
+
+<!-- source: https://nostraddress.com/docs/plans-and-pricing.md -->
+
+# Plans and Pricing
+
+NostrAddress.com offers one free tier and two premium subscription tiers.
+Current prices are shown in the pricing table at
+<https://nostraddress.com/#plan>.
+
+## Comparison
+
+| | **Free** | **Purple** | **Onyx** |
+| --- | --- | --- | --- |
+| Price | Free, always | Subscription | Subscription |
+| Registration speed | Batched, within 1 hour | **Instant** | **Instant** |
+| `nostraddress.com` | ✅ | ✅ | ✅ |
+| `nostrverified.com` | ✅ | ✅ | ✅ |
+| `21million.fun` | — | — | ✅ |
+| `nostrich.cool` | — | — | ✅ |
+| `checkmark.club` | — | — | ✅ |
+| Premium relay access | — | ✅ | ✅ |
+| Username changes by support | — | ✅ | ✅ |
+
+## Free
+
+A free Nostr Address on `@nostraddress.com` and `@nostrverified.com` will always
+be offered. Registrations are collected through the form at
+<https://nostraddress.com/#free> and processed in hourly batches, so allow up to
+one hour before the checkmark appears.
+
+## Purple
+
+Purple adds **instant registration** and access to the premium relay. It uses the
+two default domains:
+
+- `username@nostraddress.com`
+- `username@nostrverified.com`
+
+## Onyx
+
+Onyx includes everything in Purple, plus **vanity domains**:
+
+- `username@21million.fun`
+- `username@nostrich.cool`
+- `username@checkmark.club`
+
+Vanity domains are available immediately after subscribing. You can switch
+between any domain included in your plan at any time — just change the domain
+portion in the NIP-05 field of your Nostr client. The username stays the same.
+
+## Managing a subscription
+
+Purple and Onyx subscriptions are billed through Stripe. Manage, update, or
+cancel a subscription in the
+[billing portal](https://billing.stripe.com/p/login/6oE9Dk08F0XTe08fYY).
+
+## What happens if you downgrade or cancel
+
+At the end of your paid billing period:
+
+- Registrations on **vanity domains** (`21million.fun`, `nostrich.cool`,
+  `checkmark.club`) are automatically disabled.
+- Your account **automatically falls back** to the free domains
+  `@nostraddress.com` and `@nostrverified.com`.
+- Premium relay access ends.
+
+To keep a working checkmark after cancelling, edit the NIP-05 field in your Nostr
+client and switch the domain to `nostraddress.com` or `nostrverified.com`.
+
+## Notes
+
+- Usernames are **first come, first served**. Check availability before
+  subscribing using the checker in the pricing section.
+- Support for plan and username questions: <support@NostrAddress.com>
+- The service is operated by 21 Million LLC (<https://nostrservices.com>).
+
+If you would rather not pay, the free tier is genuinely free and permanent — the
+only differences are the one-hour batch delay, no vanity domains, and no premium
+relay.
+
+---
+
+<!-- source: https://nostraddress.com/docs/relay.md -->
+
+# The Premium Nostr Relay
+
+Purple and Onyx subscribers get access to a paid, allow-listed Nostr relay.
+
+## Connection details
+
+```
+wss://relay.nostraddress.com
+```
+
+Add that URL to the relay list of your Nostr client (Damus, Amethyst, Primal,
+Nostur, Snort, or any other NIP-01 client). No password or token is needed —
+access is granted by public key.
+
+## Why a paid relay
+
+Public relays are free to write to, which means they carry the full weight of
+spam and bot traffic on the network. This relay only accepts writes from public
+keys attached to an active paid subscription. The result is a smaller, faster
+relay with essentially no spam.
+
+## Access control
+
+Your public key is added to the relay's allow-list **automatically** when your
+Purple or Onyx subscription becomes active. There is nothing to configure.
+
+Access ends when the subscription ends. Your notes already stored on the relay
+are unaffected; you simply lose write access, and should switch back to public
+relays.
+
+## Technical details
+
+The relay runs [Nosflare](https://github.com/Spl0itable/nosflare), a Nostr relay
+implementation for Cloudflare Workers. Events are validated with Schnorr
+signatures over secp256k1, per NIP-01.
+
+Supported NIPs at the time of writing:
+
+| NIP | Purpose |
+| --- | --- |
+| 01 | Basic protocol flow |
+| 02 | Contact list and petnames |
+| 04 | Encrypted direct messages |
+| 05 | DNS-based identifiers (Nostr Address) |
+| 09 | Event deletion |
+| 11 | Relay information document |
+| 12 | Generic tag queries |
+| 15 | End of stored events notice |
+| 16 | Event treatment |
+| 20 | Command results |
+| 22 | Event `created_at` limits |
+| 33 | Parameterized replaceable events |
+| 40 | Expiration timestamp |
+
+The relay's live capabilities are always discoverable via its NIP-11 information
+document, which is the authoritative source:
+
+```bash
+curl -H "Accept: application/nostr+json" https://relay.nostraddress.com/
+```
+
+That returns the relay's name, description, contact, supported NIPs, software
+URL, and version as JSON.
+
+## Moderation
+
+The relay applies server-side filtering before accepting an event:
+
+- Writes are restricted to allow-listed (subscribed) public keys.
+- Certain event kinds are rejected.
+- Events containing blocked words or phrases are rejected.
+
+Rejections are returned to the client as a NIP-20 `OK` message with `false` and a
+reason string.
+
+## Connecting programmatically
+
+The relay speaks standard Nostr over WebSocket, so any NIP-01 library works:
+
+```js
+const ws = new WebSocket("wss://relay.nostraddress.com");
+
+ws.onopen = () => {
+  // Subscribe to the 20 most recent text notes
+  ws.send(JSON.stringify(["REQ", "sub1", { kinds: [1], limit: 20 }]));
+};
+
+ws.onmessage = (msg) => {
+  const [type, ...rest] = JSON.parse(msg.data);
+  if (type === "EVENT") console.log(rest[1]);
+  if (type === "EOSE") console.log("end of stored events");
+};
+```
+
+Reads are open. **Writes require an active subscription.**
+
+## Support
+
+Relay problems: <support@NostrAddress.com>
+
+---
+
+<!-- source: https://nostraddress.com/docs/api.md -->
+
+# API Reference
+
+NostrAddress.com exposes the standard NIP-05 resolution endpoint. It is a public,
+read-only, unauthenticated JSON API — safe for agents and scripts to query.
+
+## `GET /.well-known/nostr.json`
+
+Resolves a registered username to its Nostr public key.
+
+**Base URLs** — one per domain the service issues addresses on:
+
+```
+https://nostraddress.com/.well-known/nostr.json
+https://nostrverified.com/.well-known/nostr.json
+https://21million.fun/.well-known/nostr.json
+https://nostrich.cool/.well-known/nostr.json
+https://checkmark.club/.well-known/nostr.json
+```
+
+### Query parameters
+
+| Parameter | Required | Description |
+| --- | --- | --- |
+| `name` | No | The local part of the address, i.e. the text before `@`. Omit to request the full mapping. |
+
+### Response
+
+`200 OK` with `Content-Type: application/json`. The body is a JSON object with a
+`names` key mapping usernames to 64-character hex public keys:
+
+```json
+{
+  "names": {
+    "lucas": "d49a9023a21dba1b3c8306ca369bf3243d8b44b8f0b6d1196607f7b0990fa8df"
+  }
+}
+```
+
+An **unregistered** name returns `200` with an empty mapping, not a `404`:
+
+```json
+{ "names": {} }
+```
+
+Per NIP-05 the response may also include a `relays` key, mapping public keys to
+arrays of recommended relay URLs. Treat it as optional and absent unless present.
+
+### Examples
+
+Look up a single name:
+
+```bash
+curl "https://nostraddress.com/.well-known/nostr.json?name=lucas"
+```
+
+Extract just the public key:
+
+```bash
+curl -s "https://nostraddress.com/.well-known/nostr.json?name=lucas" \
+  | python3 -c "import json,sys; print(json.load(sys.stdin)['names'].get('lucas','not registered'))"
+```
+
+Check whether a username is taken, in JavaScript:
+
+```js
+async function isTaken(name, domain = "nostraddress.com") {
+  const res = await fetch(
+    `https://${domain}/.well-known/nostr.json?name=${encodeURIComponent(name)}`
+  );
+  const { names = {} } = await res.json();
+  return Boolean(names[name]);
+}
+```
+
+Verify that an address really belongs to a public key:
+
+```js
+async function verify(address, expectedHexPubkey) {
+  const [name, domain] = address.split("@");
+  const res = await fetch(
+    `https://${domain}/.well-known/nostr.json?name=${encodeURIComponent(name)}`
+  );
+  const { names = {} } = await res.json();
+  return names[name]?.toLowerCase() === expectedHexPubkey.toLowerCase();
+}
+```
+
+### Notes for implementers
+
+- Lookups are **case-sensitive** on the name as registered.
+- Public keys are returned in **hex**, never as `npub`.
+- The endpoint returns permissive CORS headers, so it is callable from a browser.
+- There is no authentication and no rate-limit documented; be a good citizen and
+  cache results rather than polling.
+
+## Relay information document (NIP-11)
+
+```bash
+curl -H "Accept: application/nostr+json" https://relay.nostraddress.com/
+```
+
+Returns the relay's name, description, contact, `supported_nips`, software URL,
+and version. See [relay.md](relay.md).
+
+## Relay WebSocket (NIP-01)
+
+```
+wss://relay.nostraddress.com
+```
+
+Standard Nostr relay protocol. Reads are open; writes require an active Purple or
+Onyx subscription. See [relay.md](relay.md).
+
+## What is *not* available via API
+
+Registration itself is not an API. The free registration form at
+<https://nostraddress.com/#free> is protected by hCaptcha and must be completed
+by a person; premium registration goes through Stripe checkout. There is no
+programmatic endpoint for creating, modifying, or deleting a registration.
+
+To change a registration:
+
+- **Free tier** — resubmit the form with the new username or key.
+- **Paid tier** — email <support@NostrAddress.com>.
+
+---
+
+<!-- source: https://nostraddress.com/docs/faq.md -->
+
+# Frequently Asked Questions
+
+## How long does registration take?
+
+**Premium (Purple and Onyx) registration is instant.**
+
+**Free registrations are processed in hourly batches** — allow up to one hour
+before adding the address to your Nostr client.
+
+## Is registration automated?
+
+Yes. Premium plans register instantly on checkout. Free submissions are collected
+by the form and processed automatically in one-hour batches.
+
+## How do I find my public hex key?
+
+NIP-05 identifiers require the older-style **hexadecimal** public key, not the
+newer `npub1…` bech32 form. Convert yours with the
+[Damus Key Converter](https://damus.io/key): paste your `npub`, copy the 64
+character hex string it returns.
+
+## What is the difference between npub, nsec, and a hex key?
+
+- **hex key** — your public key as 64 hex characters. This is what registration
+  needs.
+- **`npub1…`** — the same public key, bech32-encoded for display. Convert to hex
+  first.
+- **`nsec1…`** — your **private key**. Never share it with anyone, ever, and
+  never paste it into a website. It is not needed for NIP-05.
+
+## I've lost my private key (nsec), do you have it?
+
+No. Registration never requires your private key, and it is never transmitted to
+or stored by this service, so there is nothing to recover. A lost or compromised
+`nsec` means creating a new Nostr account and registering a new address for it.
+
+## What happens if I change my username?
+
+The registration breaks. A NIP-05 identifier binds one username to one public
+key; if you change the username in your Nostr client, the NIP-05 field no longer
+matches what was registered and the checkmark disappears.
+
+Free users: resubmit the registration form with the new username and your hex
+key. Paid subscribers: email <support@NostrAddress.com> and it will be updated
+for you.
+
+The same applies if you change your **public key** — re-register with the new key.
+
+## What are vanity domains?
+
+Alternative domains for the part after the `@`. Free registrations always use
+`@nostraddress.com` or `@nostrverified.com`. **Onyx** subscribers additionally
+get:
+
+- `21million.fun`
+- `nostrich.cool`
+- `checkmark.club`
+
+They are available immediately. To use one, just change the domain in the NIP-05
+field of your client — for example `pleb@21million.fun`.
+
+## What is a premium Nostr relay?
+
+A Nostr relay restricted to paying subscribers, at
+`wss://relay.nostraddress.com`. Because only subscribed public keys can write to
+it, it carries far less spam and is faster than open public relays. Your public
+key is allow-listed automatically when your subscription activates. See
+[relay.md](relay.md).
+
+## How do I manage my Purple or Onyx subscription?
+
+Through the Stripe
+[billing portal](https://billing.stripe.com/p/login/6oE9Dk08F0XTe08fYY).
+
+## What happens to my registration if I downgrade or cancel?
+
+At the end of the billing period, registrations on vanity domains are disabled,
+and your account automatically falls back to the free `@nostraddress.com` and
+`@nostrverified.com` domains. Switch the domain in your client's NIP-05 field to
+keep a working checkmark.
+
+## Is the free tier really free?
+
+Yes, and it is intended to stay that way. A free Nostr Address on
+`@nostraddress.com` and `@nostrverified.com` will always be offered. Paid plans
+buy instant registration, vanity domains, and the premium relay.
+
+If you find the free service useful, you can zap sats to
+`69420@wallet.yakihonne.com`.
+
+## Are usernames reserved?
+
+No. Usernames are **first come, first served**. Check availability with the
+checker in the pricing section before subscribing.
+
+## What characters can a username contain?
+
+Alphanumeric only: `A–Z`, `a–z`, and `0–9`. No spaces or punctuation.
+
+## Does a checkmark mean I am verified?
+
+Not in the identity-document sense. NIP-05 is designed to *identify* users, not
+to *verify* them — it proves the domain owner associated that name with that key.
+It becomes a meaningful endorsement when the domain itself is reputable and
+associated with a specific organization. See
+[what-is-nip-05.md](what-is-nip-05.md).
+
+## Is this affiliated with the Nostr project?
+
+No. NostrAddress.com is an independent service operated by 21 Million LLC. It is
+offered "as is" without warranty of any kind.
+
+## The checkmark still is not showing. What now?
+
+See [troubleshooting.md](troubleshooting.md).
+
+## How do I contact support?
+
+<support@NostrAddress.com>, or on Nostr at
+`npub10svpr6g7j2c5slxy2zm8k8mjm9qdm9zp5mkc0lhqw95a6jtesgaq4uycy8`.
+
+---
+
+<!-- source: https://nostraddress.com/docs/troubleshooting.md -->
+
+# Troubleshooting
+
+Almost every "the checkmark is not showing" report comes down to one of the
+causes below. Work through them in order.
+
+## 1. Confirm the registration actually exists
+
+Query the API directly. This is the ground truth — it is exactly what your Nostr
+client asks for:
+
+```bash
+curl "https://nostraddress.com/.well-known/nostr.json?name=YOURNAME"
+```
+
+- Returns your hex public key → the registration is live; the problem is in your
+  client (jump to step 4).
+- Returns `{"names":{}}` → the name is not registered on that domain. Continue
+  below.
+
+## 2. Has enough time passed?
+
+Free registrations are processed in **hourly batches**. If you submitted less
+than an hour ago, wait. Premium registrations are instant — if a paid
+registration has not appeared, contact support.
+
+## 3. Check the key format
+
+The most common failure. Your public key must be:
+
+- **Hexadecimal**, 64 characters, `0–9` and `a–f`
+- **Not** `npub1…`
+- **Never** `nsec1…`
+
+Convert with the [Damus Key Converter](https://damus.io/key), then re-register
+with the hex value.
+
+## 4. Check the username matches exactly
+
+The name in your client's NIP-05 field must exactly match the registered name.
+It is case-sensitive, and alphanumeric only. `Pleb` and `pleb` are different
+registrations.
+
+Also check the **domain**:
+
+- Free and Purple: `nostraddress.com`, `nostrverified.com`
+- Onyx only: `21million.fun`, `nostrich.cool`, `checkmark.club`
+
+Using an Onyx-only domain without an Onyx subscription will never resolve.
+
+## 5. Did you change your username or public key?
+
+Changing either one breaks the binding. If you renamed yourself in your client
+after registering, the NIP-05 field no longer matches. Either change it back, or
+re-register under the new name.
+
+Free tier: resubmit the form. Paid tier: email
+<support@NostrAddress.com>.
+
+## 6. Force your client to re-check
+
+Clients cache NIP-05 lookups, sometimes for a long time. In rough order of
+effort:
+
+1. Save your profile again — this usually triggers a fresh lookup.
+2. Clear the NIP-05 field, save, re-enter the address, save again.
+3. Log out and back in.
+4. Clear the client's cache, or reinstall it.
+5. Check your profile in a *different* client — if the checkmark shows there, the
+   registration is fine and the first client is caching.
+
+A good neutral place to check is a Nostr web viewer such as
+[njump.me](https://njump.me).
+
+## 7. Your subscription lapsed
+
+If a Purple or Onyx subscription ended, vanity-domain registrations are disabled
+at the end of the billing period and the account falls back to
+`@nostraddress.com` / `@nostrverified.com`. Edit the NIP-05 field in your client
+and change the domain to one of those two.
+
+Check subscription status in the
+[billing portal](https://billing.stripe.com/p/login/6oE9Dk08F0XTe08fYY).
+
+## 8. The username was already taken
+
+Usernames are first come, first served. If registration returned "username is
+already taken", it belongs to someone else — pick a different one. Confirm with:
+
+```bash
+curl "https://nostraddress.com/.well-known/nostr.json?name=YOURNAME"
+```
+
+If that returns a public key that is not yours, the name is taken.
+
+## Relay problems
+
+**Cannot connect to `wss://relay.nostraddress.com`** — confirm the URL includes
+the `wss://` scheme and has no trailing path. Test the relay is up:
+
+```bash
+curl -H "Accept: application/nostr+json" https://relay.nostraddress.com/
+```
+
+**Connects, but notes will not publish** — writes require an active Purple or
+Onyx subscription. Allow-listing happens automatically on activation, so if your
+subscription is current and writes are still rejected, contact support. Your
+client should surface the rejection reason as a NIP-20 `OK: false` message.
+
+Note that certain event kinds and content are rejected by relay policy; those
+rejections are intentional and affect all users equally.
+
+## Still stuck
+
+Email <support@NostrAddress.com> with:
+
+- your username
+- the domain you are using
+- your **hex public key** (never your `nsec`)
+- the client and version you are using
+- the raw output of the `curl` command in step 1
+
+You can also reach the operators on Nostr at
+`npub10svpr6g7j2c5slxy2zm8k8mjm9qdm9zp5mkc0lhqw95a6jtesgaq4uycy8`.
+
+## Security reminder
+
+No one from NostrAddress.com will ever ask for your private key (`nsec`), seed
+phrase, or password. Any message that does is a scam. NIP-05 registration only
+ever requires your **public** key.
+
+---
+
+<!-- source: https://nostraddress.com/docs/nostr-protocol.md -->
+
+# The Nostr Protocol
+
+Background context for anyone — or any agent — trying to understand what a Nostr
+Address is an address *for*.
+
+## What Nostr is
+
+**Nostr** ("Notes and Other Stuff Transmitted by Relays") is a simple, open
+protocol for a globally censorship-resistant social network.
+
+It is a protocol, in the same sense that HTTP or TCP/IP are protocols — an open
+standard anyone can build on. It is deliberately **not** an app, **not** a
+company, and **not** a service you sign up for.
+
+## How it works
+
+The design is intentionally small:
+
+- **Events.** Everything is an event: a plain JSON object. Notes, profiles,
+  reactions, contact lists, and direct messages are all just events with
+  different `kind` numbers.
+- **Keys.** Accounts are keypairs. Your public key *is* your identity; your
+  private key signs your events. Standard secp256k1 elliptic-curve cryptography,
+  with Schnorr signatures.
+- **Relays.** Events are pushed to and pulled from relay servers over plain
+  WebSocket connections. Nothing else.
+
+Because signatures are attached to every event, anyone can verify that a message
+genuinely came from the claimed sender. Verification does not require trusting
+the relay that delivered it.
+
+## Why the architecture matters
+
+There is no central cluster of servers that data must pass through. Relays are
+expected to come and go, and clients are expected to publish to several at once
+and switch freely between them. If a relay disappears, censors you, or goes
+hostile, you move — and your identity, your followers, and your history come with
+you, because they are keyed to your public key rather than to any server's
+account table.
+
+The simplicity of events-plus-websockets makes clients and relays cheap to write,
+which in practice has produced a genuinely diverse ecosystem of independent
+software rather than one dominant implementation.
+
+## The problem Nostr addresses
+
+Social media is now central to how information moves around the world, and the
+dominant platforms share a set of structural problems:
+
+- They monetize your attention by selling advertising.
+- They use sophisticated techniques to make the product addictive — a direct
+  consequence of that business model.
+- They rank and hide content with opaque algorithms, with no transparency and no
+  user control.
+- They hold unilateral authority over who may participate and what may be said.
+- They are saturated with spam and bot traffic.
+
+Nostr's answer is structural rather than editorial: no single party owns the
+network, so no single party can capture it.
+
+## Where NIP-05 fits in
+
+NIPs — Nostr Implementation Possibilities — are the specifications that extend
+the base protocol. **NIP-05** defines the mapping from a human-readable
+`username@domain` identifier to a public key, served as JSON over HTTPS at
+`/.well-known/nostr.json`.
+
+That is the piece NostrAddress.com implements. Raw public keys are unusable by
+humans; NIP-05 gives you a name to hand out instead. See
+[what-is-nip-05.md](what-is-nip-05.md).
+
+## Clients that support NIP-05
+
+Among others: Damus (iOS), Amethyst (Android), Primal, Nostur, and Snort.
+Presentation varies — some clients show a checkmark, some show the address
+itself, some show both.
+
+## Further reading
+
+- <https://nostr.com> — the Nostr project
+- <https://github.com/nostr-protocol/nips> — the NIP specifications
+- [NIP-01](https://github.com/nostr-protocol/nips/blob/master/01.md) — the base protocol
+- [NIP-05](https://github.com/nostr-protocol/nips/blob/master/05.md) — DNS-based identifiers
+
+NostrAddress.com is not affiliated with the Nostr project.
+
+---
+
