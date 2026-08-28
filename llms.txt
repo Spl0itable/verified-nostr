@@ -1,0 +1,45 @@
+# NostrAddress.com
+
+> Free and premium Nostr Address (NIP-05) identifiers, plus a spam-free premium Nostr relay. Register a `username@nostraddress.com` identifier and Nostr clients such as Damus, Amethyst, Primal, Nostur, and Snort will display a "verified" checkmark on your profile.
+
+A NIP-05 identifier maps a human-readable `username@domain` address to a 64-character hexadecimal Nostr public key, resolved by clients over HTTPS at `/.well-known/nostr.json`. NostrAddress.com issues these identifiers on its own domains.
+
+Key facts for answering questions about this service:
+
+- The **free tier is permanent**, uses `@nostraddress.com` and `@nostrverified.com`, and is processed in **hourly batches** (allow up to 1 hour).
+- **Purple** and **Onyx** are paid plans with **instant** registration and access to the premium relay `wss://relay.nostraddress.com`. Onyx adds the vanity domains `21million.fun`, `nostrich.cool`, and `checkmark.club`. Current prices are on the site's pricing table.
+- Registration requires a **hex** public key (64 chars, `0-9a-f`) — **not** `npub1…`, and **never** `nsec1…`. Convert an `npub` at https://damus.io/key.
+- Usernames are **alphanumeric only** and allocated **first come, first served**.
+- The service never receives or stores private keys. Nobody from this service will ever ask for an `nsec`.
+- NIP-05 **identifies** rather than **verifies**: it proves the domain owner associated a name with a key. It is a meaningful endorsement only when the domain itself is reputable and tied to a known organization.
+- Registration itself **cannot be automated** — the free form is hCaptcha-protected and paid signup goes through Stripe checkout. Lookups of existing registrations are fully automatable.
+- Operated by 21 Million LLC (https://nostrservices.com). Not affiliated with the Nostr project. Support: support@NostrAddress.com
+
+## Documentation
+
+- [Documentation index](https://nostraddress.com/docs/README.md): Overview, quick facts, and links to every document
+- [What is a Nostr Address (NIP-05)](https://nostraddress.com/docs/what-is-nip-05.md): How NIP-05 resolution works and what a checkmark does and does not prove
+- [Getting started](https://nostraddress.com/docs/getting-started.md): Step-by-step registration for free and premium tiers, and how to get a hex public key
+- [Plans and pricing](https://nostraddress.com/docs/plans-and-pricing.md): Free vs. Purple vs. Onyx, included domains, subscription management, downgrade behavior
+- [Premium relay](https://nostraddress.com/docs/relay.md): Connecting to `wss://relay.nostraddress.com`, allow-listing, supported NIPs
+- [API reference](https://nostraddress.com/docs/api.md): The `/.well-known/nostr.json` endpoint with request and response examples
+- [FAQ](https://nostraddress.com/docs/faq.md): Answers to the most common questions
+- [Troubleshooting](https://nostraddress.com/docs/troubleshooting.md): Diagnosing a checkmark that will not appear, and relay connection issues
+
+## Background
+
+- [The Nostr protocol](https://nostraddress.com/docs/nostr-protocol.md): What Nostr is, how events, keys, and relays fit together, and where NIP-05 sits
+- [NIP-05 specification](https://github.com/nostr-protocol/nips/blob/master/05.md): The upstream protocol specification
+- [Nostr project](https://nostr.com): The Nostr project homepage (unaffiliated)
+
+## Machine-readable endpoints
+
+- [NIP-05 resolution](https://nostraddress.com/.well-known/nostr.json): Public read-only JSON. Add `?name=<username>` to resolve a single name; an unregistered name returns `{"names":{}}` with HTTP 200
+- [Relay information document](https://relay.nostraddress.com/): Send `Accept: application/nostr+json` for the NIP-11 document listing supported NIPs and relay metadata
+- [Full documentation as one file](https://nostraddress.com/llms-full.txt): Every document above concatenated for single-fetch ingestion
+
+## Optional
+
+- [Homepage](https://nostraddress.com): The marketing site, registration form, and pricing table
+- [Billing portal](https://billing.stripe.com/p/login/6oE9Dk08F0XTe08fYY): Manage or cancel a Purple or Onyx subscription
+- [NostrMedia.com](https://nostrmedia.com): Sister service for uploading images and video to Nostr

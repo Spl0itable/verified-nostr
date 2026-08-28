@@ -19,6 +19,40 @@ If your public key is correctly associated with your Nostr address, you will see
 
 The Nostr NIP-05 protocol is used to create an identifier between your public key and your Nostr address. When you enter your information into the Nostr address (NIP-05) field of a Nostr client (such as Damus or Primal), they send a request to confirm the Nostr address and public key are associated.
 
+## Documentation
+
+Full documentation lives in [`docs/`](docs/) and is published as raw Markdown so
+that AI agents and assistants can read it directly:
+
+| Document | Published at |
+| --- | --- |
+| [Documentation index](docs/README.md) | `/docs/README.md` |
+| [What is a Nostr Address (NIP-05)](docs/what-is-nip-05.md) | `/docs/what-is-nip-05.md` |
+| [Getting started](docs/getting-started.md) | `/docs/getting-started.md` |
+| [Plans and pricing](docs/plans-and-pricing.md) | `/docs/plans-and-pricing.md` |
+| [Premium relay](docs/relay.md) | `/docs/relay.md` |
+| [API reference](docs/api.md) | `/docs/api.md` |
+| [FAQ](docs/faq.md) | `/docs/faq.md` |
+| [Troubleshooting](docs/troubleshooting.md) | `/docs/troubleshooting.md` |
+| [The Nostr protocol](docs/nostr-protocol.md) | `/docs/nostr-protocol.md` |
+
+### AI agent entry points
+
+- [`llms.txt`](llms.txt) — concise, linked site summary following the [llmstxt.org](https://llmstxt.org) convention
+- [`llms-full.txt`](llms-full.txt) — every document above concatenated for single-fetch ingestion
+- [`robots.txt`](robots.txt) — crawler policy; AI crawlers are explicitly allowed
+- [`sitemap.xml`](sitemap.xml) — canonical URL list
+
+> **Maintainer note:** files in `docs/`, along with `llms.txt`, `llms-full.txt`,
+> `robots.txt` and `sitemap.xml`, must **not** be given YAML front matter.
+> Without it, Jekyll copies them verbatim, which is what agents fetching raw
+> Markdown expect. Regenerate `llms-full.txt` after editing any document in
+> `docs/`:
+>
+> ```sh
+> ./scripts/build-llms-full.sh
+> ```
+
 ## Security and privacy
 
 This free service is designed with security and privacy in mind. The service uses HTTPS to encrypt all communication between your browser and our server, ensuring that your data is protected in transit. The service does not require or store your private key on the server.
